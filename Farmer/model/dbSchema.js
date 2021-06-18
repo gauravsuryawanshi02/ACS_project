@@ -49,7 +49,7 @@ const farmerSchema = new Schema({
   },
   netBanking:{
       bankName:{
-        type:String,
+        //type:String,
         //required:true
       },
       accNo:{
@@ -65,7 +65,7 @@ const farmerSchema = new Schema({
     type:String,
     //required:true
   },
-}, { timestamps: true });
+}, { timestamps: true },{ typeKey: '$type' });
 
 const Fdb = mongoose.model('Farmer', farmerSchema);
 module.exports = Fdb;

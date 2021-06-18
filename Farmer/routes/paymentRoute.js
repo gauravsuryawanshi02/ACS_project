@@ -32,15 +32,13 @@ payment
             console.log(err);
         });
     })
-    .delete((req,res)=>{
-        const id = req.params.id; 
-    
-        Farmer.aggregate([{
-            $match: { _id: new mongoose.Types.ObjectId(id) }
-          },{ $unset: ["netBanking"]}],)
-        .then(result => {
+    .patch((req,res)=>{
+        const _id = req.params.id; 
+        Farmer.updateOne(
+            { _id: _id },
+            { $set: { "netBanking": req.body } }
+         ) .then(result => {
             res.send(result);
-            console.log('unset');
         })
         .catch(err => {
             console.log(err);
