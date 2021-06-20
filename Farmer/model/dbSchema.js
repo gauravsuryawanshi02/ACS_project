@@ -1,10 +1,14 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
 
 const farmerSchema = new Schema({
+
   name: {
     type: String,
-    required: true,
+    //required: true,
   },
   email: {
     type: String,
@@ -17,7 +21,7 @@ const farmerSchema = new Schema({
   },
   mobileNo:{
       type: Number,
-      required:true
+      //required:true
   },
   address:{
       state:{
@@ -65,7 +69,35 @@ const farmerSchema = new Schema({
     type:String,
     //required:true
   },
+  tokens:[{
+    token:{
+      type:String,
+      //required:true
+    }
+  }],
 }, { timestamps: true },{ typeKey: '$type' });
+
+//generating token
+farmerSchema.methods.generateAuthToken = async function(){
+  try {
+    console.log(this.email);
+    const token = jwt.sign({email:this.email},process.env.SECRET_KEY);
+    this.tokens = this.tokens.concat({token});
+    await this.save();
+    return token;
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
+//bcrypting
+farmerSchema.pre('save',async function(next){
+  if(this.isModified('password')){
+  this.password = await  bcrypt.hash(this.password,10);
+  }
+  next();
+})
 
 const Fdb = mongoose.model('Farmer', farmerSchema);
 module.exports = Fdb;
