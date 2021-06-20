@@ -11,17 +11,28 @@ router
           console.log("working get");
         })
         .catch(err => {
-          console.log(err);
+          res.status(400).send("page not found");
         });
     })
-    .post((req,res)=>{
-      const user = new Dealer(req.body);
-      user.save().then(()=>{
-          res.send(user)
-          console.log("working post");
-      }).catch((err)=>{
-          console.log(err);
-      })
+    .post(async (req,res)=>{
+      try {
+        const user = new Dealer(req.body);
+        //pass bcrypt
+        //json web token
+        const token = await user.generateAuthToken();
+        //cookies
+        res.cookie('jwt',token,{
+          expires:new Date(Date.now()+30000),
+          httpOnly:true
+        });
+        
+        //saving data to database
+        await user.save();
+        res.status(201).send(user)
+        console.log("working post");
+      } catch (error) {
+        console.log(error);
+      }
     });
 
 router
@@ -33,7 +44,7 @@ router
           res.send(result);
       })
       .catch(err => {
-          console.log(err);
+        res.status(400).send("page not found");
       });
     })
     .patch((req,res)=>{
@@ -43,7 +54,7 @@ router
               res.send(result);
           })
           .catch(err => {
-              console.log(err);
+            res.status(400).send("page not found");
           });
     })
     .delete((req,res)=>{
@@ -53,7 +64,7 @@ router
         res.send(result);
     })
     .catch(err => {
-        console.log(err);
+      res.status(400).send("page not found");
     });
     })
 
