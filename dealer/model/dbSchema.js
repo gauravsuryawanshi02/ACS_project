@@ -3,24 +3,28 @@ const Schema = mongoose.Schema;
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const {isEmail} = require('validator');
 
 const dealerSchema = new Schema({
   name: {
     type: String,
-    required: true,
+    required: [true, 'please enter name'],
   },
   email: {
     type: String,
-    required: true,
-    unique : true
+    required: [true, 'please enter name'],
+    unique : [true, 'enter different email'],
+    lowercase : true,
+    validate : [isEmail,'please enter valid email']
   },
   password: {
     type: String,
-    required: true
+    required: [true, 'please enter name'],
+    minlength: [6,'password should consist more than 6 character']
   },
   mobileNo:{
       type: Number,
-      required:true
+      required:[true, 'please enter name'],
   },
   address:{
       state:{

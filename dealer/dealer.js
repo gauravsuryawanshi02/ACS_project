@@ -6,10 +6,13 @@ const database = require("./routes/router");
 const bcrypt = require('bcryptjs');
 const port = process.env.PORT || 5000;
 const jwt = require('jsonwebtoken');
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
 
 dealer.use(express.json());
-dealer.use("/dealer/signup" , database);
 
+dealer.use("/dealer/signup" , database);
 //dealer home 
 dealer.get("/dealer",async(req,res)=>{
     try {
@@ -45,6 +48,20 @@ dealer.post('/dealer/login',async (req,res)=>{
     }
   
 })
-
+const options = {
+    definition: {
+        openapi: '3.0.3',
+        info: {
+            title: 'Dealer API',
+        },
+        servers: [
+            {
+                url: `http://localhost:${port}`,
+            },
+        ],
+    },
+    apis: ['./routes/*.js'],
+};
+dealer.use('/dealerapi', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
 //listning port
 module.exports= dealer.listen(port);
