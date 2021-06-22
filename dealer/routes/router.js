@@ -26,7 +26,7 @@ router
  *             type: object                      
  *     responses:
  *       200:
- *         description: Returns the requested admin
+ *         description: Returns the requested dealer
  */
     .post(controller.postDealer)
 

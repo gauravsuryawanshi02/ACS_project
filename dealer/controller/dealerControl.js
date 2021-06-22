@@ -1,4 +1,5 @@
 const Dealer = require("../model/dbSchema");
+const bcrypt = require('bcryptjs');
 
 const handleError = (err) =>{
     let errors = {email:'',password:''}
@@ -75,11 +76,39 @@ const deleteDealer = (req,res)=>{
     });
 }
 
+const loginDealer = async (req,res)=>{
+  try {
+      const email = req.body.email;
+      const pass = req.body.password;
+
+  const user = await Dealer.findOne({email:email});
+  //bcrypt
+  const isMatch = await bcrypt.compare(pass, user.password);
+  //jwt
+  const token = await user.generateAuthToken();
+  //cookies
+  res.cookie('jwt',token,{
+      expires:new Date(Date.now()+30000),
+      httpOnly:true
+    });
+  //console.log(token); 
+  if(isMatch){
+      res.status(201).send('login succesfull');
+  }else{
+      res.send("invalide password");
+  }
+  } catch (error) {
+      res.status(400).send("invalide emailId");
+    }
+
+}
+
 
 module.exports = {
     getDealer,
     postDealer,
     getDealerId,
     patchDealer,
-    deleteDealer
+    deleteDealer,
+    loginDealer
 }

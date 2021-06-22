@@ -3,9 +3,10 @@ const dealer = express();
 const Dealer = require("./model/dbSchema");
 require('./model/db');
 const database = require("./routes/router");
-const bcrypt = require('bcryptjs');
+const login = require("./routes/loginRoute");
+//const bcrypt = require('bcryptjs');
 const port = process.env.PORT || 5000;
-const jwt = require('jsonwebtoken');
+// const jwt = require('jsonwebtoken');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -13,6 +14,7 @@ const swaggerUi = require('swagger-ui-express');
 dealer.use(express.json());
 
 dealer.use("/dealer/signup" , database);
+dealer.use("/dealer/login",login);
 //dealer home 
 dealer.get("/dealer",async(req,res)=>{
     try {
@@ -22,32 +24,7 @@ dealer.get("/dealer",async(req,res)=>{
     }
 });
 
-dealer.post('/dealer/login',async (req,res)=>{
-    try {
-        const email = req.body.email;
-        const pass = req.body.password;
-
-    const user = await Dealer.findOne({email:email});
-    //bcrypt
-    const isMatch = await bcrypt.compare(pass, user.password);
-    //jwt
-    const token = await user.generateAuthToken();
-    //cookies
-    res.cookie('jwt',token,{
-        expires:new Date(Date.now()+30000),
-        httpOnly:true
-      });
-    //console.log(token); 
-    if(isMatch){
-        res.status(201).send('login succesfull');
-    }else{
-        res.send("invalide password");
-    }
-    } catch (error) {
-        res.status(400).send("invalide emailId");
-    }
-  
-})
+//swagger
 const options = {
     definition: {
         openapi: '3.0.3',
