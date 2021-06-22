@@ -2,3 +2,5 @@ admin/node_modules/
 Farmer/node_modules/
 dealer/node_modules/
 payment/node_modules/
+Farmer/.env
+dealer/.env
