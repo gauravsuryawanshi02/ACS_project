@@ -5,17 +5,17 @@ const requireAuth = (req, res, next) => {
 
   // check json web token exists & is verified
   if (token) {
-    jwt.verify(token, 'net ninja secret', (err, decodedToken) => {
+    jwt.verify(token, process.env.SECRET_KEY, (err, decodedToken) => {
       if (err) {
         console.log(err.message);
-        res.redirect('/login');
+        res.redirect('login first');
       } else {
         console.log(decodedToken);
         next();
       }
     });
   } else {
-    res.redirect('/login');
+    res.send('login first');
   }
 };
 
