@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 admin/node_modules/
 Farmer/node_modules/
 dealer/node_modules/
@@ -5,3 +6,8 @@ payment/node_modules/
 crop/
 Farmer/.env
 dealer/.env
+=======
+admin/
+dealer/
+payment/
+>>>>>>> farmer_branch
