@@ -1,14 +1,17 @@
 const express = require('express');
-const farmer = express();
+const admin = express();
 require('./model/db');
+const cookieParser = require('cookie-parser');
+const adminRoute = require('./router/adminRoute');
 
 const port = process.env.PORT || 4000;
 
-farmer.get("/admin",(req,res)=>{
-    res.send("hello from admin again");
-})
+admin.use(express.json());
+
+admin.use(cookieParser());
+admin.use('/admin',adminRoute);
 
 
 
 
-farmer.listen(port);
+admin.listen(port);
