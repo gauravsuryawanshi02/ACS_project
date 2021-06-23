@@ -80,10 +80,10 @@ const farmerSchema = new Schema({
 //generating token
 farmerSchema.methods.generateAuthToken = async function(){
   try {
-    console.log(this.email);
+    //console.log(this.email);
     const token = jwt.sign({email:this.email},process.env.SECRET_KEY);
-    this.tokens = this.tokens.concat({token});
-    await this.save();
+    //this.tokens = this.tokens.concat({token});
+    //await this.save();
     return token;
   } catch (error) {
     console.log(error);

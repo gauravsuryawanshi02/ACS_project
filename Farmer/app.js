@@ -10,12 +10,14 @@ const login = require('./routes/loginRoute');
 const bcrypt = require('bcryptjs');
 const port = process.env.PORT || 3000;
 const jwt = require('jsonwebtoken');
-const {requireAuth} = require('./middleware/authJwt')
 const cookieParser = require('cookie-parser');
+const auth = require('./middleware/authJwt');
 
 farmer.use(express.json());
 
 farmer.use(cookieParser());
+
+
 
 //farmer signup
 farmer.use("/farmer/signup" , database); 
@@ -27,12 +29,23 @@ farmer.use('/farmer/bank-data',bankData);
 farmer.use('/farmer/login',login);
 
 //farmer home 
-farmer.get("/farmer",(req,res)=>{
+farmer.get("/farmer",auth,(req,res)=>{
     res.send("hello from farmer");
+    
 });
 
-farmer.get('/farmer/home', requireAuth,(req,res)=>{
-    res.send('In farmer home');
+farmer.get('/farmer/logout',auth,async(req,res)=>{
+    try {
+        res.clearCookie('jwt');
+        res.send('logout successfull');
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+
+farmer.get('/farmer/home', (req,res)=>{
+    
 })
 
 //listning port

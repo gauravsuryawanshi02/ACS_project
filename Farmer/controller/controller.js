@@ -1,7 +1,7 @@
 const Farmer = require("../model/dbSchema");
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
-
+const jwt = require('jsonwebtoken');
 
 //error handling
 const handleError = (err) =>{
@@ -139,6 +139,15 @@ const loginFarmer = async (req,res)=>{
     const isMatch = await bcrypt.compare(pass, user.password);
     //jwt
     const token = await user.generateAuthToken();
+
+
+   
+    //cookies
+    res.cookie('jwt',token,{
+        expires:new Date(Date.now()+600000),
+        httpOnly:true
+    });
+    //console.log(token);
     
     if(isMatch){
         res.status(201).send('login succesfull');
@@ -146,7 +155,8 @@ const loginFarmer = async (req,res)=>{
         res.send("invalide password");
     }
     } catch (error) {
-        res.status(400).send("invalide emailId");
+        //res.status(400).send("invalide emailId");
+        console.log(error);
     }
   
 }
