@@ -1,5 +1,6 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 admin/node_modules/
 Farmer/node_modules/
 dealer/node_modules/
@@ -17,3 +18,8 @@ admin
 Farmer
 payment
 >>>>>>> Dealer_branch
+=======
+Farmer
+payment
+dealer
+>>>>>>> Admin_branch
