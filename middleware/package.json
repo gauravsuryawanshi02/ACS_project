@@ -1,8 +1,8 @@
 {
-  "name": "admin",
+  "name": "middleware",
   "version": "1.0.0",
   "description": "",
-  "main": "admin.js",
+  "main": "authAdmin.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,16 +10,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.5",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.12.14"
-  },
-  "devDependencies": {
-    "chai": "^4.3.4",
-    "chai-http": "^4.3.0",
-    "mocha": "^9.0.1"
+    "jsonwebtoken": "^8.5.1"
   }
 }

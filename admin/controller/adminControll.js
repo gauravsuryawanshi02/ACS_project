@@ -1,5 +1,5 @@
 const Admin = require('../model/dbSchma');
-//const bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 
 const handleError = (err) =>{
     let errors = {email:'',password:''}
@@ -24,7 +24,7 @@ const  getAdmin = (req,res) => {
     });
 }
 
-const loginAdmin = async (req,res)=>{
+const postAdmin = async (req,res)=>{
     try {
       const user = new Admin(req.body);
       //pass bcrypt
@@ -45,9 +45,43 @@ const loginAdmin = async (req,res)=>{
     }
 
 }
+//Login farmer
+const loginAdmin = async (req,res)=>{
+    try {
+        const username = req.body.username;
+        const pass = req.body.password;
+
+    const user = await Admin.findOne({username:username});
+    //bcrypt
+    const isMatch = await bcrypt.compare(pass, user.password);
+    //jwt
+    const token = await user.generateAuthToken();
+
+
+    console.log(token);
+   
+    //cookies
+    res.cookie('jwt',token,{
+        expires:new Date(Date.now()+600000),
+        httpOnly:true
+    });
+    //console.log(token);
+    
+    if(isMatch){
+        res.status(201).send('login succesfull');
+    }else{
+        res.send("invalide password");
+    }
+    } catch (error) {
+        //res.status(400).send("invalide emailId");
+        console.log(error);
+    }
+  
+}
 
 module.exports = {
     getAdmin,
+    postAdmin,
     loginAdmin
 
 }

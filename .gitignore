@@ -3,3 +3,5 @@ Farmer/node_modules/
 crop/node_modules/
 dealer/node_modules/
 payment/node_modules/
+middleware/node_modules/
+apiGateway/node_modules/

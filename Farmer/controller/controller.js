@@ -174,6 +174,4 @@ module.exports = {
    getBankDataID,
    patchBank,
    loginFarmer,
-
-
 }

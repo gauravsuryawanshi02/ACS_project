@@ -4,18 +4,19 @@ const controller = require('../controller/controller');
 //const authJwt = require('../middleware/authJwt');
 const cookieParser = require('cookie-parser');
 const auth = require('../middleware/authJwt');
+const authAdmin = require('../../middleware/authAdmin');
 
 router.use(cookieParser());
 router
     .route("/")
-    .get(auth,controller.getFarmer)
+    .get(controller.getFarmer)
     .post(controller.postFarmer)
 
 router
     .route('/:id')
-    .get(auth,controller.getFarmerID) 
-    .patch(auth,controller.patchFarmer)
-    .delete(auth,controller.deleteFarmer)
+    .get(controller.getFarmerID) 
+    .patch(authAdmin,controller.patchFarmer)
+    .delete(authAdmin,controller.deleteFarmer)
 
 
 module.exports = router;

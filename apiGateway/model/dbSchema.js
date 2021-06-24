@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
 //Schema
-const adminSchema = new Schema({
+const apiSchema = new Schema({
     username: {
         type: String,
         required: true,
@@ -16,10 +16,7 @@ const adminSchema = new Schema({
     }
 });
 
-
-
-
-adminSchema.methods.generateAuthToken = async function(){
+apiSchema.methods.generateAuthToken = async function(){
     try {
       //console.log(this.email);
       const token = jwt.sign({username:this.username},process.env.SECRET_KEY);
@@ -33,12 +30,12 @@ adminSchema.methods.generateAuthToken = async function(){
   
   
   //bcrypting
-adminSchema.pre('save',async function(next){
+apiSchema.pre('save',async function(next){
     if(this.isModified('password')){
     this.password = await  bcrypt.hash(this.password,10);
     }
     next();
 })
 
-const Adb = mongoose.model('Admin', adminSchema);
+const Adb = mongoose.model('Api', apiSchema);
 module.exports = Adb;

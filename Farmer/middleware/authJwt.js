@@ -1,5 +1,4 @@
 const jwt = require('jsonwebtoken');
-const Farmer = require('../model/dbSchema');
 
 const auth = async(req,res,next)=>{
   try {
