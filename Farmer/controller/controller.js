@@ -18,6 +18,7 @@ const handleError = (err) =>{
 
 //get all farmer details
 const getFarmer = (req,res)=>{
+
     Farmer.find()
     .then(result => {
       res.send(result);
@@ -139,9 +140,6 @@ const loginFarmer = async (req,res)=>{
     const isMatch = await bcrypt.compare(pass, user.password);
     //jwt
     const token = await user.generateAuthToken();
-
-
-   
     //cookies
     res.cookie('jwt',token,{
         expires:new Date(Date.now()+600000),
