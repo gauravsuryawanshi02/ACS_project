@@ -7,6 +7,19 @@ loginRoute.use(cookieParser());
 
 loginRoute
     .route('/')
+    /**
+ * @swagger
+ * /farmer/login:
+ *   post:
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object                      
+ *     responses:
+ *       200:
+ *         description: Returns the requested dealer
+ */
     .post(controller.loginFarmer)
 
 

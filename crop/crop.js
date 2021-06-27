@@ -11,26 +11,26 @@ crop.use(express.json());
 
 crop.use("/crop", cropRoute);
 
-crop.get('/crop',(req,res)=>{
+crop.get('/crop/home',(req,res)=>{
     res.send('in crop home');
 })
 
 
-//swagger
-const options = {
-    definition: {
-        openapi: '3.0.3',
-        info: {
-            title: 'crop API',
-        },
-        servers: [
-            {
-                url: `http://localhost:6000`,
-            },
-        ],
-    },
-    apis: ['./routes/*.js'],
-};
-crop.use('/cropapi', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
+// //swagger
+// const options = {
+//     definition: {
+//         openapi: '3.0.3',
+//         info: {
+//             title: 'crop API',
+//         },
+//         servers: [
+//             {
+//                 url: `http://localhost:6000`,
+//             },
+//         ],
+//     },
+//     apis: ['./routes/*.js'],
+// };
+// crop.use('/cropapi', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
 //listning port
 module.exports= crop.listen(port);

@@ -14,7 +14,7 @@ const authAdmin = async(req,res,next)=>{
     req.token = token;
     next();
   } catch (error) {
-    //res.status(404).send('Access is only valid for admin');
+    res.status(404).send('login first');
     console.log(error);
   }
 }

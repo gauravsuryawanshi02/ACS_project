@@ -1,6 +1,7 @@
 const express = require('express');
 const controller = require('../controller/dealerControl'); 
 let router = express.Router();
+const auth  = require('../../middleware/authAdmin')
 
 
 

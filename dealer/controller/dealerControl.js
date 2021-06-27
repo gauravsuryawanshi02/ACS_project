@@ -88,7 +88,7 @@ const loginDealer = async (req,res)=>{
   const token = await user.generateAuthToken();
   //cookies
   res.cookie('jwt',token,{
-      expires:new Date(Date.now()+30000),
+      expires:new Date(Date.now()+600000),
       httpOnly:true
     });
   //console.log(token); 

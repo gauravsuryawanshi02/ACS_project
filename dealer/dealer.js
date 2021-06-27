@@ -9,10 +9,13 @@ const port = process.env.PORT || 5000;
 // const jwt = require('jsonwebtoken');
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const axios = require ('axios');
+const auth = require('../middleware/authAdmin');
+const cookieParser = require('cookie-parser');
 
 
 dealer.use(express.json());
-
+dealer.use(cookieParser())
 dealer.use("/dealer/signup" , database);
 dealer.use("/dealer/login",login);
 //dealer home 
@@ -23,6 +26,17 @@ dealer.get("/dealer",async(req,res)=>{
         res.status(404).send("invalide emailId");
     }
 });
+
+dealer.get('/dealer/farmer/:id',auth,(req,res)=>{
+    const id = req.params.id;
+    axios.get('http://localhost:3000/farmer/signup/'+id).then((response)=>{
+        res.send(response.data)
+    }).catch((error)=>{
+        console.log(error);
+    })
+})
+
+
 
 //swagger
 const options = {

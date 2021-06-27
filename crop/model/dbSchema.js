@@ -7,6 +7,15 @@ const cropSchema = new Schema({
     type: String,
     required: [true, 'please enter name'],
   },
+  customerid:{
+    type: mongoose.SchemaTypes.ObjectId,
+    required: [true,'enter customer id']
+  },
+  Crop_Type: {
+    type: String,
+    trim: true,
+    required: [true, 'enter crop_type']
+  },
   quantity:{
       type : Number,
       required : true
