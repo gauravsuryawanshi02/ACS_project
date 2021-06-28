@@ -24,7 +24,36 @@ const postCrop = async (req,res)=>{
     }
 }
 
+const cropName = async (req,res)=>{
+  try{
+    const name = req.params.name;
+    const query = {"name":name}
+
+    Crop.find(query)
+    .then(result => {
+      res.send(result);
+    })
+    .catch(err => {
+      res.status(400).send("page not found");
+    });
+  }catch(err){
+    console.log(err);
+  }
+}
+
+const deleteCrop = (req, res) => {
+  Crop.findByIdAndRemove(req.params.id)
+      .then((result) => {
+          res.status(200).send(result);
+      })
+      .catch((err) => {
+          res.status(400).send("not done");
+      })
+};
+
 module.exports = {
     getCrop,
-    postCrop
+    postCrop,
+    deleteCrop,
+    cropName
 }

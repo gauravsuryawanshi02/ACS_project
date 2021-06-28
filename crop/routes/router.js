@@ -7,7 +7,7 @@ let router = express.Router();
 router
 /**
  * @swagger
- * /dealer/signup:
+ * /crop/view:
  *   get:
  *     responses:
  *       200:
@@ -35,5 +35,5 @@ router
     .route('/add')
     .post(controller.postCrop)
 
-
+router.get('/:name',controller.cropName)
 module.exports = router;

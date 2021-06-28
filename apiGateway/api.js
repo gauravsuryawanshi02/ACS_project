@@ -8,6 +8,9 @@ const authApi = require('../middleware/authAdmin');
 const cookieParser = require('cookie-parser');
 const api = express();
 const port = process.env.PORT || 7000;
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
 
 api.use(express.json());
 api.use(cookieParser());
@@ -40,8 +43,20 @@ api.post('/register',async (req,res)=>{
     }    
 })
 
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object                      
+ *     responses:
+ *       200:
+ *         description: Returns the requested dealer
+ */
 //login api
-
 api.post('/login', async (req,res)=>{
     try {
         const username = req.body.username;
@@ -76,6 +91,16 @@ api.post('/login', async (req,res)=>{
 })
 
 
+
+/**
+ * @swagger
+ * /dealer/data:
+ *   get:
+ *     responses:
+ *       200:
+ *         description: Returns all the dealers
+ */
+
 //Get dealer
 api.get('/dealer/data',authApi,(req,res)=>{
     axios.get('http://localhost:5000/dealer/signup').then((response)=>{
@@ -85,6 +110,14 @@ api.get('/dealer/data',authApi,(req,res)=>{
     })
 })
 
+/**
+ * @swagger
+ * /farmer/data:
+ *   get:
+ *     responses:
+ *       200:
+ *         description: Returns all the farmers
+ */
 //Get farmer
 api.get('/farmer/data',authApi,(req,res)=>{
     axios.get('http://localhost:3000/farmer/signup').then((response)=>{
@@ -93,7 +126,19 @@ api.get('/farmer/data',authApi,(req,res)=>{
         console.log(error);
     })
 })
-
+/**
+ * @swagger
+ * /farmer/data/{id}:
+ *   get:
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        type: string
+ *     description: farmer get by id
+ *     responses:
+ *       200:
+ *         description: Returns the requested farmer
+ */
 //Get farmer by id
 api.get('/farmer/data/:id',authApi,(req,res)=>{
     const id = req.params.id;
@@ -103,7 +148,19 @@ api.get('/farmer/data/:id',authApi,(req,res)=>{
         console.log(error);
     })
 })
-
+/**
+ * @swagger
+ * /dealer/data/{id}:
+ *   get:
+ *     parameters:
+ *      - in: path
+ *        name: id
+ *        type: string
+ *     description: dealer get by id
+ *     responses:
+ *       200:
+ *         description: Returns the requested dealer
+ */
 //Get dealer by id
 api.get('/dealer/data/:id',authApi,(req,res)=>{
     const id = req.params.id;
@@ -162,7 +219,7 @@ api.delete('/dealer/delete/:id',authApi,(req,res)=>{
 
 //Get crop
 api.get('/crop',authApi,(req,res)=>{
-    axios.get('http://localhost:6000/crop/view').then((response)=>{
+    axios.get('http://localhost:3030/crop/view').then((response)=>{
         res.send(response.data)
     }).catch((error)=>{
         console.log(error);
@@ -170,12 +227,51 @@ api.get('/crop',authApi,(req,res)=>{
 })
 
 //Post crop
-api.post('/crop/add',authApi,(req,res)=>{
-    axios.post('http://localhost:6000/crop/add',req.body).then((response)=>{
+api.post('/crop/add',(req,res)=>{
+    axios.post('http://localhost:3030/crop/add',req.body).then((response)=>{
         res.send(response.data);
     })
 })
 
+/**
+ * @swagger
+ * /crop/{name}:
+ *   get:
+ *     parameters:
+ *      - in: path
+ *        name: name
+ *        type: string
+ *     description: crop get by id
+ *     responses:
+ *       200:
+ *         description: Returns the requested crop
+ */
+//search crop
+api.get('/crop/:name',authApi,(req,res)=>{
+    const name = req.params.name;
+    axios.get('http://localhost:3030/crop/'+name).then((response)=>{
+        res.send(response.data)
+    }).catch((error)=>{
+        console.log(error);
+    })
+})
+
+//swagger
+const options = {
+    definition: {
+        openapi: '3.0.3',
+        info: {
+            title: 'API',
+        },
+        servers: [
+            {
+                url: `http://localhost:${port}`,
+            },
+        ],
+    },
+    apis: ['api.js'],
+};
+api.use('/apigateway', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
 
 api.listen(port,()=>{
     console.log(`listning to port ${port}`);

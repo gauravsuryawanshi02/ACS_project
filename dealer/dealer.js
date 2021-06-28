@@ -27,7 +27,7 @@ dealer.get("/dealer",async(req,res)=>{
     }
 });
 
-dealer.get('/dealer/farmer/:id',auth,(req,res)=>{
+dealer.get('/dealer/farmer/:id',(req,res)=>{
     const id = req.params.id;
     axios.get('http://localhost:3000/farmer/signup/'+id).then((response)=>{
         res.send(response.data)
@@ -36,6 +36,13 @@ dealer.get('/dealer/farmer/:id',auth,(req,res)=>{
     })
 })
 
+dealer.get('/crop',(req,res)=>{
+    axios.get('http://localhost:7000/crop').then((response)=>{
+        res.send(response.data)
+    }).catch((error)=>{
+        console.log(error);
+    })
+})
 
 
 //swagger

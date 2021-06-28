@@ -34,7 +34,6 @@ farmer.get('/farmer/logout',async(req,res)=>{
     }
 })
 
-
 farmer.get('/farmer/home', (req,res)=>{
     })
 //swagger

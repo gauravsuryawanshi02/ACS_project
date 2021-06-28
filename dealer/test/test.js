@@ -26,7 +26,7 @@ describe('Get /dealer',()=>{
 //get by id
 describe('Get /dealer',()=>{
     it('it should get by id',(done)=>{
-        id = '60cf738182750e46c0ed505d';
+        id = '60cd73d2d833aa0cb44516ea';
         chai.request(dealer)
         .get('/dealer/signup/'+id)
         .end((err,response)=>{
@@ -40,8 +40,8 @@ describe('Get /dealer',()=>{
 describe('post /dealer/signup',()=>{
     it('it should post data',(done)=>{
         user = {
-            name:"dealer18",
-            email:"dealer18@gmail.com",
+            name:"dealer19",
+            email:"dealer19@gmail.com",
             password:"qwerty",
             mobileNo:"123456789"
         }
@@ -59,9 +59,9 @@ describe('post /dealer/signup',()=>{
 describe('patch /dealer/signup',()=>{
     it('it should patch data',(done)=>{
         user = {
-            name:"gaurav11",
+            name:"gaurav13",
         }
-        id = '60cf738182750e46c0ed505d';
+        id = '60cd73d2d833aa0cb44516ea';
         chai.request(dealer)
         .patch('/dealer/signup/'+id)
         .send(user)
@@ -76,7 +76,7 @@ describe('patch /dealer/signup',()=>{
 //delete
 describe('delete /dealer/signup',()=>{
     it('it should delete data',(done)=>{
-        id = '60cf738182750e46c0ed505d';
+        id = '60cd73d2d833aa0cb44516ea';
         chai.request(dealer)
         .delete('/dealer/signup/'+id)
         .end((err,response)=>{

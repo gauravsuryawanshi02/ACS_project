@@ -16,7 +16,7 @@ router
  *         description: Returns all the dealers
  */
     .route("/")
-    .get(auth,controller.getFarmer)
+    .get(controller.getFarmer)
 /**
  * @swagger
  * /farmer/signup:
@@ -30,7 +30,7 @@ router
  *       200:
  *         description: Returns the requested dealer
  */
-    .post(auth,controller.postFarmer)
+    .post(controller.postFarmer)
 
 router
     .route('/:id')
@@ -49,7 +49,7 @@ router
  */
     .get(controller.getFarmerID)
 
-    .patch(auth,controller.patchFarmer)
+    .patch(controller.patchFarmer)
 /**
  * @swagger
  * /farmer/signup/{id}:
@@ -63,7 +63,7 @@ router
  *       200:
  *         description: Returns the requested dealer
  */
-    .delete(auth,controller.deleteFarmer)
+    .delete(controller.deleteFarmer)
 
 
 module.exports = router;

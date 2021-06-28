@@ -44,27 +44,25 @@ const dealerSchema = new Schema({
         //required:true
       }
   },
-  tokens:[{
-    token:{
-      type:String,
-      //required:true
-    }
-  }],  
+  orders: {
+		type: Array,
+		required: true
+	
+  },  
 }, { timestamps: true });
 
 //generating token
 dealerSchema.methods.generateAuthToken = async function(){
   try {
     //console.log(this.email);
-    const token = jwt.sign({email:this.email},process.env.SECRET_KEY);
-    this.tokens = this.tokens.concat({token});
+    //const token = jwt.sign({email:this.email},process.env.SECRET_KEY);
+    //this.tokens = this.tokens.concat({token});
     await this.save();
     return token;
   } catch (error) {
     console.log(error);
   }
 }
-
 
 //bcrypting
 dealerSchema.pre('save',async function(next){

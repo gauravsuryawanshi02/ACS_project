@@ -66,4 +66,7 @@ router
     .delete(controller.deleteDealer)
 
 
+router.post('/addcrop',controller.addCrop)
+
+
 module.exports = router;
