@@ -32,7 +32,7 @@ const postDealer = async (req, res) => {
     const token = await user.generateAuthToken();
     //cookies
     res.cookie('jwt', token, {
-      expires: new Date(Date.now() + 30000),
+      expires: new Date(Date.now() + 600000),
       httpOnly: true
     });
 
@@ -103,16 +103,19 @@ const loginDealer = async (req, res) => {
   }
 
 }
-
-const addCrop = async (req, res) => {
+const addCart = async (req, res) => {
   try {
-    const cropResponse = await axios.post("http://localhost:3030/crop/add", req.body)
-    if (cropResponse.status === 200) {
+    const cropResponse = await axios.post("http://localhost:3030/cart/add", req.body)
+    console.log(cropResponse.data);
+    if (cropResponse.status === 201) {
       Dealer.findById(req.body.customerid, (err, user) => {
+        //console.log(cropResponse.data._id);
         user.orders.push(cropResponse.data._id)
         user.save().then(() => {
+          //console.log(result.data);
           res.send(`Crop created `)
         }).catch((err) => {
+          //console.log(err.message)
           res.send("failed to add crop")
         })
       })
@@ -122,6 +125,16 @@ const addCrop = async (req, res) => {
   }
 }
 
+const getCart = async (req,res)=>{
+  axios.get(`http://localhost:3030/cart/view/${req.params.id}`)
+        .then((result) => {
+            res.send(result.data)
+        }).catch((err) => {
+            res.status(400).send(err.message)
+            console.log(err);
+        });
+}
+
 module.exports = {
   getDealer,
   postDealer,
@@ -129,5 +142,6 @@ module.exports = {
   patchDealer,
   deleteDealer,
   loginDealer,
-  addCrop
+  addCart,
+  getCart
 }

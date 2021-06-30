@@ -32,6 +32,8 @@ router
  */
     .post(controller.postFarmer)
 
+router.post('/addcrop',controller.addCrop);
+
 router
     .route('/:id')
 /**

@@ -15,7 +15,7 @@ router
  *         description: Returns all the dealers
  */
     .route("/")
-    .get(controller.getDealer)
+    .get(auth,controller.getDealer)
 /**
  * @swagger
  * /dealer/signup:
@@ -29,7 +29,7 @@ router
  *       200:
  *         description: Returns the requested dealer
  */
-    .post(controller.postDealer)
+    .post(auth,controller.postDealer)
 
 router
     .route('/:id')
@@ -46,8 +46,8 @@ router
  *       200:
  *         description: Returns the requested dealer
  */
-    .get(controller.getDealerId)
-    .patch(controller.patchDealer)
+    .get(auth,controller.getDealerId)
+    .patch(auth,controller.patchDealer)
 
 /**
  * @swagger
@@ -63,10 +63,11 @@ router
  *         description: Returns the requested dealer
  */
 
-    .delete(controller.deleteDealer)
+    .delete(auth,controller.deleteDealer)
 
 
-router.post('/addcrop',controller.addCrop)
+router.post('/addcart',auth,controller.addCart)
+router.get('/getcart/:id',auth,controller.getCart)
 
 
 module.exports = router;

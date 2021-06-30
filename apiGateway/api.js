@@ -7,7 +7,7 @@ const bcrypt = require('bcryptjs');
 const authApi = require('../middleware/authAdmin');
 const cookieParser = require('cookie-parser');
 const api = express();
-const port = process.env.PORT || 7000;
+const port = process.env.PORT || 8000;
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
 
@@ -21,76 +21,74 @@ api.get('/home',(req,res)=>{
     console.log('in home');
 })
 
-//api register
-api.post('/register',async (req,res)=>{
-    try {
-      const user = new Api(req.body);
-      //pass bcrypt
-      //json web token
-      const token = await user.generateAuthToken();
-      //cookies
-      res.cookie('jwt',token,{
-        expires:new Date(Date.now()+600000),
-        httpOnly:true
-    });
+// //api register
+// api.post('/register',async (req,res)=>{
+//     try {
+//       const user = new Api(req.body);
+//       //pass bcrypt
+//       //json web token
+//       const token = await user.generateAuthToken();
+//       //cookies
+//       res.cookie('jwt',token,{
+//         expires:new Date(Date.now()+600000),
+//         httpOnly:true
+//     });
       
-      //saving data to database
-      await user.save();
-      res.status(201).send(user)
-      console.log("working post");
-    }catch (error) {
-        console.log(error);
-    }    
-})
+//       //saving data to database
+//       await user.save();
+//       res.status(201).send(user)
+//       console.log("working post");
+//     }catch (error) {
+//         console.log(error);
+//     }    
+// })
 
-/**
- * @swagger
- * /login:
- *   post:
- *     requestBody:
- *       content:
- *         application/json:
- *           schema:
- *             type: object                      
- *     responses:
- *       200:
- *         description: Returns the requested dealer
- */
-//login api
-api.post('/login', async (req,res)=>{
-    try {
-        const username = req.body.username;
-        const pass = req.body.password;
+// /**
+//  * @swagger
+//  * /login:
+//  *   post:
+//  *     requestBody:
+//  *       content:
+//  *         application/json:
+//  *           schema:
+//  *             type: object                      
+//  *     responses:
+//  *       200:
+//  *         description: Returns the requested dealer
+//  */
+// //login api
+// api.post('/login', async (req,res)=>{
+//     try {
+//         const username = req.body.username;
+//         const pass = req.body.password;
 
-    const user = await Api.findOne({username:username});
-    //bcrypt
-    const isMatch = await bcrypt.compare(pass, user.password);
-    //jwt
-    const token = await user.generateAuthToken();
+//     const user = await Api.findOne({username:username});
+//     //bcrypt
+//     const isMatch = await bcrypt.compare(pass, user.password);
+//     //jwt
+//     const token = await user.generateAuthToken();
 
 
-    console.log(token);
+//     console.log(token);
    
-    //cookies
-    res.cookie('jwt',token,{
-        expires:new Date(Date.now()+600000),
-        httpOnly:true
-    });
-    //console.log(token);
+//     //cookies
+//     res.cookie('jwt',token,{
+//         expires:new Date(Date.now()+600000),
+//         httpOnly:true
+//     });
+//     //console.log(token);
     
-    if(isMatch){
-        res.status(201).send('login succesfull');
-    }else{
-        res.send("invalide password");
-    }
-    } catch (error) {
-        //res.status(400).send("invalide emailId");
-        console.log(error);
-    }
+//     if(isMatch){
+//         res.status(201).send('login succesfull');
+//     }else{
+//         res.send("invalide password");
+//     }
+//     } catch (error) {
+//         //res.status(400).send("invalide emailId");
+//         console.log(error);
+//     }
   
-})
-
-
+// })
 
 /**
  * @swagger
@@ -102,7 +100,7 @@ api.post('/login', async (req,res)=>{
  */
 
 //Get dealer
-api.get('/dealer/data',authApi,(req,res)=>{
+api.get('/dealer/data',(req,res)=>{
     axios.get('http://localhost:5000/dealer/signup').then((response)=>{
         res.send(response.data)
     }).catch((error)=>{
@@ -119,7 +117,7 @@ api.get('/dealer/data',authApi,(req,res)=>{
  *         description: Returns all the farmers
  */
 //Get farmer
-api.get('/farmer/data',authApi,(req,res)=>{
+api.get('/farmer/data',(req,res)=>{
     axios.get('http://localhost:3000/farmer/signup').then((response)=>{
         res.send(response.data)
     }).catch((error)=>{
@@ -140,7 +138,7 @@ api.get('/farmer/data',authApi,(req,res)=>{
  *         description: Returns the requested farmer
  */
 //Get farmer by id
-api.get('/farmer/data/:id',authApi,(req,res)=>{
+api.get('/farmer/data/:id',(req,res)=>{
     const id = req.params.id;
     axios.get('http://localhost:3000/farmer/signup/'+id).then((response)=>{
         res.send(response.data)
@@ -162,7 +160,7 @@ api.get('/farmer/data/:id',authApi,(req,res)=>{
  *         description: Returns the requested dealer
  */
 //Get dealer by id
-api.get('/dealer/data/:id',authApi,(req,res)=>{
+api.get('/dealer/data/:id',(req,res)=>{
     const id = req.params.id;
     axios.get('http://localhost:5000/dealer/signup/'+id).then((response)=>{
         res.send(response.data)
@@ -172,21 +170,21 @@ api.get('/dealer/data/:id',authApi,(req,res)=>{
 })
 
 //Post dealer
-api.post('/dealer/add',authApi,(req,res)=>{
+api.post('/dealer/add',(req,res)=>{
     axios.post('http://localhost:5000/dealer/signup',req.body).then((response)=>{
         res.send(response.data);
     })
 })
 
 //Post farmer
-api.post('/farmer/add',authApi,(req,res)=>{
+api.post('/farmer/add',(req,res)=>{
     axios.post('http://localhost:3000/farmer/signup',req.body).then((response)=>{
         res.send(response.data);
     })
 })
 
 //Patch farmer
-api.patch('/farmer/update/:id',authApi,(req,res)=>{
+api.patch('/farmer/update/:id',(req,res)=>{
     const id = req.params.id;
     axios.patch('http://localhost:3000/farmer/signup'+id,req.body).then((response)=>{
         res.send(response.data);
@@ -194,7 +192,7 @@ api.patch('/farmer/update/:id',authApi,(req,res)=>{
 })
 
 //Patch dealer
-api.patch('/dealer/update/:id',authApi,(req,res)=>{
+api.patch('/dealer/update/:id',(req,res)=>{
     const id = req.params.id;
     axios.patch('http://localhost:5000/dealer/signup'+id,req.body).then((response)=>{
         res.send(response.data);
@@ -202,7 +200,7 @@ api.patch('/dealer/update/:id',authApi,(req,res)=>{
 })
 
 //Delete farmer
-api.delete('/farmer/delete/:id',authApi,(req,res)=>{
+api.delete('/farmer/delete/:id',(req,res)=>{
     const id = req.params.id;
     axios.patch('http://localhost:3000/farmer/signup'+id,req.body).then((response)=>{
         res.send(response.data);
@@ -210,7 +208,7 @@ api.delete('/farmer/delete/:id',authApi,(req,res)=>{
 })
 
 //Delete dealer
-api.delete('/dealer/delete/:id',authApi,(req,res)=>{
+api.delete('/dealer/delete/:id',(req,res)=>{
     const id = req.params.id;
     axios.patch('http://localhost:5000/dealer/signup'+id,req.body).then((response)=>{
         res.send(response.data);
@@ -218,7 +216,7 @@ api.delete('/dealer/delete/:id',authApi,(req,res)=>{
 })
 
 //Get crop
-api.get('/crop',authApi,(req,res)=>{
+api.get('/crop',(req,res)=>{
     axios.get('http://localhost:3030/crop/view').then((response)=>{
         res.send(response.data)
     }).catch((error)=>{
@@ -247,7 +245,7 @@ api.post('/crop/add',(req,res)=>{
  *         description: Returns the requested crop
  */
 //search crop
-api.get('/crop/:name',authApi,(req,res)=>{
+api.get('/crop/:name',(req,res)=>{
     const name = req.params.name;
     axios.get('http://localhost:3030/crop/'+name).then((response)=>{
         res.send(response.data)

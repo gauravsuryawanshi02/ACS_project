@@ -18,8 +18,9 @@ dealer.use(express.json());
 dealer.use(cookieParser())
 dealer.use("/dealer/signup" , database);
 dealer.use("/dealer/login",login);
+
 //dealer home 
-dealer.get("/dealer",async(req,res)=>{
+dealer.get("/",async(req,res)=>{
     try {
         res.send("hello from dealer");
     } catch (error) {
@@ -27,7 +28,16 @@ dealer.get("/dealer",async(req,res)=>{
     }
 });
 
-dealer.get('/dealer/farmer/:id',(req,res)=>{
+dealer.get('/logout',async(req,res)=>{
+    try {
+        res.clearCookie('jwt');
+        res.send('logout successfull');
+    } catch (error) {
+        console.log(error);
+    }
+})
+
+dealer.get('/farmer/:id',auth,(req,res)=>{
     const id = req.params.id;
     axios.get('http://localhost:3000/farmer/signup/'+id).then((response)=>{
         res.send(response.data)
@@ -36,8 +46,17 @@ dealer.get('/dealer/farmer/:id',(req,res)=>{
     })
 })
 
-dealer.get('/crop',(req,res)=>{
-    axios.get('http://localhost:7000/crop').then((response)=>{
+dealer.get('/crop',auth,(req,res)=>{
+    axios.get('http://localhost:8000/crop').then((response)=>{
+        res.send(response.data)
+    }).catch((error)=>{
+        console.log(error);
+    })
+})
+
+dealer.get('/crop/:name',auth,(req,res)=>{
+    const name = req.params.name;
+    axios.get('http://localhost:8000/crop/'+name).then((response)=>{
         res.send(response.data)
     }).catch((error)=>{
         console.log(error);

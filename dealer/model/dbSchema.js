@@ -55,7 +55,7 @@ const dealerSchema = new Schema({
 dealerSchema.methods.generateAuthToken = async function(){
   try {
     //console.log(this.email);
-    //const token = jwt.sign({email:this.email},process.env.SECRET_KEY);
+    const token = jwt.sign({email:this.email},process.env.SECRET_KEY);
     //this.tokens = this.tokens.concat({token});
     await this.save();
     return token;

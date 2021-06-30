@@ -2,6 +2,7 @@ const express = require('express');
 const crop = express();
 require('./model/db');
 const cropRoute = require('./routes/router');
+const cartRoute = require('./routes/cartRouter')
 const port = process.env.PORT || 3030;
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
@@ -10,6 +11,8 @@ const swaggerUi = require('swagger-ui-express');
 crop.use(express.json());
 
 crop.use("/crop", cropRoute);
+
+crop.use('/cart',cartRoute)
 
 crop.get('/crop/home',(req,res)=>{
     res.send('in crop home');

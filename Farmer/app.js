@@ -35,6 +35,7 @@ farmer.get('/farmer/logout',async(req,res)=>{
 })
 
 farmer.get('/farmer/home', (req,res)=>{
+    res.send('home');
     })
 //swagger
 const options = {
@@ -51,7 +52,7 @@ const options = {
     },
     apis: ['./routes/*.js'],
 };
-farmer.use('/farmerapi', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
+farmer.use('/farmerdocs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
 
 
 //listning port

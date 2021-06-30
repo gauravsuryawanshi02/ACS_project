@@ -41,16 +41,6 @@ const farmerSchema = new Schema({
         //required:true
       }
   },
-  crop:{
-    name:{
-        type:String,
-        //required:true
-    },
-    quantity:{
-        type:Number,
-        //required:true
-    }
-  },
   netBanking:{
       bankName:{
         //type:String,
@@ -69,13 +59,11 @@ const farmerSchema = new Schema({
     type:String,
     //required:true
   },
-  tokens:[{
-    token:{
-      type:String,
-      //required:true
-    }
-  }],
-}, { timestamps: true },{ typeKey: '$type' });
+  crops: {
+		type: Array,
+		required: true
+  },
+}, { timestamps: true });
 
 //generating token
 farmerSchema.methods.generateAuthToken = async function(){

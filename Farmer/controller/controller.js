@@ -2,6 +2,7 @@ const Farmer = require("../model/dbSchema");
 const bcrypt = require('bcryptjs');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
+const axios = require('axios');
 
 //error handling
 const handleError = (err) =>{
@@ -159,6 +160,27 @@ const loginFarmer = async (req,res)=>{
   
 }
 
+const addCrop = async (req, res) => {
+    try {
+      const cropResponse = await axios.post("http://localhost:3030/crop/add", req.body)
+      //console.log(cropResponse.data);
+      if (cropResponse.status === 201) {
+        Farmer.findById(req.body.customerid, (err, user) => {
+          //console.log(cropResponse.data._id);
+          user.crops.push(cropResponse.data._id)
+          user.save().then(() => {
+            //console.log(result.data);
+            res.send(`Crop created `)
+          }).catch((err) => {
+            //console.log(err.message)
+            res.send("failed to add crop")
+          })
+        })
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
 
 //export controller
@@ -172,4 +194,5 @@ module.exports = {
    getBankDataID,
    patchBank,
    loginFarmer,
+   addCrop
 }
