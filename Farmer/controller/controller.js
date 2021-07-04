@@ -9,7 +9,7 @@ const handleError = (err) =>{
     let errors = {email:'',password:''}
     //validation
 
-    if(err.message.includes('Dealer validation failed')){
+    if(err.message.includes('Farmer validation failed')){
         Object.values(err.errors).forEach(({properties})=>{
             errors[properties.path]=properties.message;
         });
@@ -49,7 +49,8 @@ const postFarmer = async (req,res)=>{
       console.log("working post");
     }catch (err) {
         const errors = handleError(err);
-        res.status(400).json({errors});
+        res.status(400).json({"massage":'email is already present'});
+        //console.log(err)
     }
 }
 
@@ -165,12 +166,12 @@ const addCrop = async (req, res) => {
       const cropResponse = await axios.post("http://localhost:3030/crop/add", req.body)
       //console.log(cropResponse.data);
       if (cropResponse.status === 201) {
-        Farmer.findById(req.body.customerid, (err, user) => {
+        Farmer.findById(req.body.salerid, (err, user) => {
           //console.log(cropResponse.data._id);
           user.crops.push(cropResponse.data._id)
           user.save().then(() => {
             //console.log(result.data);
-            res.send(`Crop created `)
+            res.send(`${req.body.name} added for sale `)
           }).catch((err) => {
             //console.log(err.message)
             res.send("failed to add crop")

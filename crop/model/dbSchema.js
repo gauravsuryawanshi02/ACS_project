@@ -7,7 +7,7 @@ const cropSchema = new Schema({
     type: String,
     required: [true, 'please enter name'],
   },
-  customerid:{
+  salerid:{
     type: mongoose.SchemaTypes.ObjectId,
     //required: [true,'enter customer id']
   },

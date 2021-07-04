@@ -12,21 +12,22 @@ const swaggerUi = require('swagger-ui-express');
 const axios = require ('axios');
 const auth = require('../middleware/authAdmin');
 const cookieParser = require('cookie-parser');
+const cors = require('cors');
 
-
+dealer.use(cors());
 dealer.use(express.json());
 dealer.use(cookieParser())
-dealer.use("/dealer/signup" , database);
+dealer.use("/dealer" , database);
 dealer.use("/dealer/login",login);
 
 //dealer home 
-dealer.get("/",async(req,res)=>{
-    try {
-        res.send("hello from dealer");
-    } catch (error) {
-        res.status(404).send("invalide emailId");
-    }
-});
+// dealer.get("/home",async(req,res)=>{
+//     try {
+//         res.send("hello from dealer");
+//     } catch (error) {
+//         res.status(404).send("invalide emailId");
+//     }
+// });
 
 dealer.get('/logout',async(req,res)=>{
     try {
@@ -47,7 +48,7 @@ dealer.get('/farmer/:id',auth,(req,res)=>{
 })
 
 dealer.get('/crop',auth,(req,res)=>{
-    axios.get('http://localhost:8000/crop').then((response)=>{
+    axios.get('http://localhost:3030/crop/view').then((response)=>{
         res.send(response.data)
     }).catch((error)=>{
         console.log(error);
@@ -56,7 +57,14 @@ dealer.get('/crop',auth,(req,res)=>{
 
 dealer.get('/crop/:name',auth,(req,res)=>{
     const name = req.params.name;
-    axios.get('http://localhost:8000/crop/'+name).then((response)=>{
+    axios.get('http://localhost:3030/crop/'+name).then((response)=>{
+        res.send(response.data)
+    }).catch((error)=>{
+        console.log(error);
+    })
+})
+dealer.post('/payment',(req,res)=>{
+    axios.get('http://localhost:5555/payment',req.body).then((response)=>{
         res.send(response.data)
     }).catch((error)=>{
         console.log(error);
@@ -71,14 +79,9 @@ const options = {
         info: {
             title: 'Dealer API',
         },
-        servers: [
-            {
-                url: `http://localhost:${port}`,
-            },
-        ],
     },
     apis: ['./routes/*.js'],
 };
-dealer.use('/dealerapi', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
+dealer.use('/dealerdocs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
 //listning port
 module.exports= dealer.listen(port);

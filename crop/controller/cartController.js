@@ -1,17 +1,17 @@
 const Cart = require("../model/cartSchema");
 
 
-const getCart = (req, res) => {
-    const id =req.params.id;
-    //console.log(id);
-    Cart.find({customerid:id}).
-        then(result => {
-            res.send(result);
-        }).catch(err => {
-            console.log(err);
-            res.send(err)
-        })
-}
+// const getCart = (req, res) => {
+//     const id =req.params.id;
+//     //console.log(id);
+//     Cart.find({customerid:id},{"name":1,"_id":0,"price":1,"quantity":1}).sort({ "createdAt": -1 }).
+//         then(result => {
+//             res.send(result);
+//         }).catch(err => {
+//             console.log(err);
+//             res.send(err)
+//         })
+// }
 
 const postCart = async (req, res) => {
     try {
@@ -51,10 +51,32 @@ const deleteCart = (req, res) => {
             res.status(400).send("not done");
         })
 };
+const billCart = async (req, res) => {
+    try {
+        const cartResponse = await Cart.find({ customerid: req.params.id },{"name":1,"_id":0,"price":1,"quantity":1,"createdAt": 1}).sort({ "createdAt": -1 });
+        if (cartResponse) {
+            var total = 0;
+            for (var i =0; i<cartResponse.length; i++){
+                total += cartResponse[i].price * cartResponse[i].quantity ;
+            }
+            //console.log(cartResponse)
+            res.json(
+                {'cart contain':cartResponse,
+                 "Total Amount": total});
+        }
+        else{
+            res.send('cart is empty');
+        }
+    }
+    catch (err) {
+        res.send(err);
+    }
+} 
 
 module.exports = {
-    getCart,
+    //getCart,
     postCart,
     deleteCart,
-    cartName
+    cartName,
+    billCart
 }

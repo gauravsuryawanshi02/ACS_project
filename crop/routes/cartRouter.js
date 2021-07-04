@@ -4,17 +4,19 @@ let router = express.Router();
 
 
 
-router
-/**
- * @swagger
- * /crop/view:
- *   get:
- *     responses:
- *       200:
- *         description: Returns all the crops
- */
-    .route("/view/:id")
-    .get(controller.getCart)
+// router
+// /**
+//  * @swagger
+//  * /crop/view:
+//  *   get:
+//  *     responses:
+//  *       200:
+//  *         description: Returns all the crops
+//  */
+//     .route("/view/:id")
+//     .get(controller.getCart)
+    
+
 
 
 router
@@ -35,5 +37,6 @@ router
     .route('/add')
     .post(controller.postCart)
 
-router.get('/:name',controller.cartName)
+router.get('/:name',controller.cartName);
+router.get('/bill/:id',controller.billCart)
 module.exports = router;

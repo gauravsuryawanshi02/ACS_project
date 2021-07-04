@@ -10,6 +10,9 @@ const api = express();
 const port = process.env.PORT || 8000;
 const swaggerJSDoc = require('swagger-jsdoc');
 const swaggerUi = require('swagger-ui-express');
+const cors = require('cors');
+
+api.use(cors());
 
 
 api.use(express.json());
@@ -21,74 +24,74 @@ api.get('/home',(req,res)=>{
     console.log('in home');
 })
 
-// //api register
-// api.post('/register',async (req,res)=>{
-//     try {
-//       const user = new Api(req.body);
-//       //pass bcrypt
-//       //json web token
-//       const token = await user.generateAuthToken();
-//       //cookies
-//       res.cookie('jwt',token,{
-//         expires:new Date(Date.now()+600000),
-//         httpOnly:true
-//     });
+//api register
+api.post('/register',async (req,res)=>{
+    try {
+      const user = new Api(req.body);
+      //pass bcrypt
+      //json web token
+      const token = await user.generateAuthToken();
+      //cookies
+      res.cookie('jwt',token,{
+        expires:new Date(Date.now()+600000),
+        httpOnly:true
+    });
       
-//       //saving data to database
-//       await user.save();
-//       res.status(201).send(user)
-//       console.log("working post");
-//     }catch (error) {
-//         console.log(error);
-//     }    
-// })
+      //saving data to database
+      await user.save();
+      res.status(201).send(user)
+      console.log("working post");
+    }catch (error) {
+        console.log(error);
+    }    
+})
 
-// /**
-//  * @swagger
-//  * /login:
-//  *   post:
-//  *     requestBody:
-//  *       content:
-//  *         application/json:
-//  *           schema:
-//  *             type: object                      
-//  *     responses:
-//  *       200:
-//  *         description: Returns the requested dealer
-//  */
-// //login api
-// api.post('/login', async (req,res)=>{
-//     try {
-//         const username = req.body.username;
-//         const pass = req.body.password;
+/**
+ * @swagger
+ * /login:
+ *   post:
+ *     requestBody:
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object                      
+ *     responses:
+ *       200:
+ *         description: Returns the requested dealer
+ */
+//login api
+api.post('/login', async (req,res)=>{
+    try {
+        const username = req.body.username;
+        const pass = req.body.password;
 
-//     const user = await Api.findOne({username:username});
-//     //bcrypt
-//     const isMatch = await bcrypt.compare(pass, user.password);
-//     //jwt
-//     const token = await user.generateAuthToken();
+    const user = await Api.findOne({username:username});
+    //bcrypt
+    const isMatch = await bcrypt.compare(pass, user.password);
+    //jwt
+    const token = await user.generateAuthToken();
 
 
-//     console.log(token);
+    console.log(token);
    
-//     //cookies
-//     res.cookie('jwt',token,{
-//         expires:new Date(Date.now()+600000),
-//         httpOnly:true
-//     });
-//     //console.log(token);
+    //cookies
+    res.cookie('jwt',token,{
+        expires:new Date(Date.now()+600000),
+        httpOnly:true
+    });
+    //console.log(token);
     
-//     if(isMatch){
-//         res.status(201).send('login succesfull');
-//     }else{
-//         res.send("invalide password");
-//     }
-//     } catch (error) {
-//         //res.status(400).send("invalide emailId");
-//         console.log(error);
-//     }
+    if(isMatch){
+        res.status(201).send('login succesfull');
+    }else{
+        res.send("invalide password");
+    }
+    } catch (error) {
+        //res.status(400).send("invalide emailId");
+        console.log(error);
+    }
   
-// })
+})
 
 /**
  * @swagger
@@ -100,7 +103,7 @@ api.get('/home',(req,res)=>{
  */
 
 //Get dealer
-api.get('/dealer/data',(req,res)=>{
+api.get('/dealer/data',authApi,(req,res)=>{
     axios.get('http://localhost:5000/dealer/signup').then((response)=>{
         res.send(response.data)
     }).catch((error)=>{
@@ -117,7 +120,7 @@ api.get('/dealer/data',(req,res)=>{
  *         description: Returns all the farmers
  */
 //Get farmer
-api.get('/farmer/data',(req,res)=>{
+api.get('/farmer/data',authApi,(req,res)=>{
     axios.get('http://localhost:3000/farmer/signup').then((response)=>{
         res.send(response.data)
     }).catch((error)=>{
@@ -138,7 +141,7 @@ api.get('/farmer/data',(req,res)=>{
  *         description: Returns the requested farmer
  */
 //Get farmer by id
-api.get('/farmer/data/:id',(req,res)=>{
+api.get('/farmer/data/:id',authApi,(req,res)=>{
     const id = req.params.id;
     axios.get('http://localhost:3000/farmer/signup/'+id).then((response)=>{
         res.send(response.data)
@@ -160,7 +163,7 @@ api.get('/farmer/data/:id',(req,res)=>{
  *         description: Returns the requested dealer
  */
 //Get dealer by id
-api.get('/dealer/data/:id',(req,res)=>{
+api.get('/dealer/data/:id',authApi,(req,res)=>{
     const id = req.params.id;
     axios.get('http://localhost:5000/dealer/signup/'+id).then((response)=>{
         res.send(response.data)
@@ -259,7 +262,7 @@ const options = {
     definition: {
         openapi: '3.0.3',
         info: {
-            title: 'API',
+            title: 'ADMIN',
         },
         servers: [
             {
@@ -269,7 +272,7 @@ const options = {
     },
     apis: ['api.js'],
 };
-api.use('/apigateway', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
+api.use('/admindocs', swaggerUi.serve, swaggerUi.setup(swaggerJSDoc(options)));
 
 api.listen(port,()=>{
     console.log(`listning to port ${port}`);

@@ -6,6 +6,7 @@ const auth  = require('../../middleware/authAdmin')
 
 
 router
+    .route("/signup")
 /**
  * @swagger
  * /dealer/signup:
@@ -14,8 +15,7 @@ router
  *       200:
  *         description: Returns all the dealers
  */
-    .route("/")
-    .get(auth,controller.getDealer)
+    .get(controller.getDealer)
 /**
  * @swagger
  * /dealer/signup:
@@ -29,13 +29,16 @@ router
  *       200:
  *         description: Returns the requested dealer
  */
-    .post(auth,controller.postDealer)
+    .post(controller.postDealer)
+
+
+//by id
 
 router
     .route('/:id')
 /**
  * @swagger
- * /dealer/signup/{id}:
+ * /dealer/{id}:
  *   get:
  *     parameters:
  *      - in: path
@@ -46,12 +49,12 @@ router
  *       200:
  *         description: Returns the requested dealer
  */
-    .get(auth,controller.getDealerId)
-    .patch(auth,controller.patchDealer)
+    .get(controller.getDealerId)
+    .patch(controller.patchDealer)
 
 /**
  * @swagger
- * /dealer/signup/{id}:
+ * /dealer/{id}:
  *   delete:
  *     parameters:
  *      - in: path
@@ -63,11 +66,30 @@ router
  *         description: Returns the requested dealer
  */
 
-    .delete(auth,controller.deleteDealer)
+    .delete(controller.deleteDealer)
 
 
+
+/**
+ * @swagger
+ * /dealer/home:
+ *   get:
+ *     responses:
+ *       200:
+ *         description: Returns all the dealers
+ */
+router.get('/home',async(req,res)=>{
+    try {
+        res.send("hello from dealer");
+    } catch (error) {
+        res.status(404).send("invalide emailId");
+    }
+});
+
+//dealer cart
 router.post('/addcart',auth,controller.addCart)
 router.get('/getcart/:id',auth,controller.getCart)
+router.get('/bill/:id',auth,controller.getBill)
 
 
 module.exports = router;

@@ -89,7 +89,7 @@ const loginDealer = async (req, res) => {
     const token = await user.generateAuthToken();
     //cookies
     res.cookie('jwt', token, {
-      expires: new Date(Date.now() + 600000),
+      expires: new Date(Date.now() + 3600000),
       httpOnly: true
     });
     //console.log(token); 
@@ -107,13 +107,15 @@ const addCart = async (req, res) => {
   try {
     const cropResponse = await axios.post("http://localhost:3030/cart/add", req.body)
     console.log(cropResponse.data);
-    if (cropResponse.status === 201) {
-      Dealer.findById(req.body.customerid, (err, user) => {
-        //console.log(cropResponse.data._id);
+    console.log(req.body.customerid);
+    if (cropResponse) {
+      Dealer.findById(req.body.customerid,(err, user) => {
+        console.log(cropResponse.data._id);
         user.orders.push(cropResponse.data._id)
-        user.save().then(() => {
-          //console.log(result.data);
-          res.send(`Crop created `)
+        user.save().then((result) => {
+          console.log(req.body);
+          console.log(err)
+          res.send(`${req.body.name} added to cart of ${result.name} `)
         }).catch((err) => {
           //console.log(err.message)
           res.send("failed to add crop")
@@ -125,15 +127,27 @@ const addCart = async (req, res) => {
   }
 }
 
-const getCart = async (req,res)=>{
+const getCart = async (req, res) => {
   axios.get(`http://localhost:3030/cart/view/${req.params.id}`)
-        .then((result) => {
-            res.send(result.data)
-        }).catch((err) => {
-            res.status(400).send(err.message)
-            console.log(err);
-        });
+    //axios.get(`http://localhost:3030/cart/bill/${req.params.id}`)
+    .then((result) => {
+
+      res.send(result.data)
+    }).catch((err) => {
+      res.status(400).send(err.message)
+      console.log(err);
+    });
 }
+const getBill = async (req, res) => {
+  axios.get(`http://localhost:3030/cart/bill/${req.params.id}`)
+    .then((result) => {
+      res.send(result.data)
+    }).catch((err) => {
+      res.status(400).send(err.message)
+      console.log(err);
+    });
+}
+
 
 module.exports = {
   getDealer,
@@ -143,5 +157,6 @@ module.exports = {
   deleteDealer,
   loginDealer,
   addCart,
-  getCart
+  getCart,
+  getBill
 }
